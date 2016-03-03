@@ -2901,6 +2901,42 @@ var PageView = function pageView(container, id, scale,
               lastScrollSource: PDFView
           }) : null;
 
+    //add custom watermark
+
+    var wmCanvas=document.createElement('canvas');
+    wmCanvas.width=canvas.width;
+    wmCanvas.height=canvas.height;
+    wmCanvas.setAttribute("style","position:absolute;border:1px solid black")
+    var wmContext=wmCanvas.getContext('2d');
+    wmContext.globalAlpha=0.4;
+    // setup text for filling
+    wmContext.font = "24px sans-serif" ;
+    wmContext.fillStyle = "black";
+    // get the metrics with font settings
+    var metrics = wmContext.measureText("for Daniel Schulz 07-03-2015 Online-Lite");
+    var width = metrics.width;
+    // height is font size
+    var height = 24;
+
+    // change the origin coordinate to the middle of the context
+    wmContext.translate(canvas.width/2, 15);
+    // rotate the context (so it's rotated around its center)
+    //wmContext.rotate(-Math.atan(origCanvas.height/origCanvas.width));
+    // as the origin is now at the center, just need to center the text
+    wmContext.fillText("for Daniel Schulz 07-03-2015 Online-Lite",-width/2,(height/2));
+
+    if(div.firstChild)
+      div.insertBefore(wmCanvas, div.firstChild);
+    else
+      div.appendChild(wmCanvas);
+
+    console.log("watermark added");
+
+
+
+
+
+
     if (outputScale.scaled) {
       var cssScale = 'scale(' + (1 / outputScale.sx) + ', ' +
                                 (1 / outputScale.sy) + ')';
